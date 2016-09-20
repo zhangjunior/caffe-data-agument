@@ -66,7 +66,7 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
   CHECK_GE(datum_height, crop_size);
   CHECK_GE(datum_width, crop_size);
 
-  Dtype* mean = nullptr;
+  Dtype* mean = NULL;
   if (has_mean_file) {
     CHECK_EQ(datum_channels, data_mean_.channels());
     CHECK_EQ(datum_height, data_mean_.height());
@@ -496,7 +496,7 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
 	const bool rotation = param_.rotation_angle_interval();
 	const bool channel_adjust = channel_factors_.size();
 
-	Dtype* mean = nullptr;
+	Dtype* mean = NULL;
 	if (has_mean_file) {
 		CHECK_EQ(img_channels, data_mean_.channels());
 		CHECK_EQ(img_height, data_mean_.height());
@@ -609,6 +609,12 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
 			cv::Rect rect(dx, dy, rotate_width, rotate_height);
 			cv_img = cv_img_border(rect);
 			cv_seg = cv_seg_border(rect);
+			// update height/width
+			img_height = cv_img.rows;
+			img_width = cv_img.cols;
+
+			seg_height = cv_seg.rows;
+			seg_width = cv_seg.cols;
 		}
 		//channel scaling
 		if (channel_adjust) {
@@ -662,6 +668,12 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
 					0, pad_width, cv::BORDER_CONSTANT,
 					cv::Scalar(ignore_label));
 			}
+			// update height/width
+			img_height = cv_img.rows;
+			img_width = cv_img.cols;
+
+			seg_height = cv_seg.rows;
+			seg_width = cv_seg.cols;
 		}
 	}
 	//end transform
@@ -720,6 +732,12 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
 		cv::Rect roi(w_off, h_off, crop_width, crop_height);
 		cv_img = cv_img(roi);
 		cv_seg = cv_seg(roi);
+		// update height/width
+		img_height = cv_img.rows;
+		img_width = cv_img.cols;
+
+		seg_height = cv_seg.rows;
+		seg_width = cv_seg.cols;
 	}
 
 	CHECK(cv_img.data);
