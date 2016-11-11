@@ -1,1 +1,0 @@
-D:\project\caffe-windows\Build\x64\Release\caffe train --solver=D:\project\caffe-windows\examples\mnist\lenet_solver.prototxt
